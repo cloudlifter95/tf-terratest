@@ -4,3 +4,12 @@ This repo is intended to try and demonstrate some of the capabilities of test to
 - static testing: **tfsec**
 - dynamic testing: **terratest**
 This project comes with an automated github runner, as well as a manual section with command lines.
+
+
+# install dependencies
+from project root folder, run: 
+`go mod download`  
+
+# run test
+`go test ./tests -v`
+
