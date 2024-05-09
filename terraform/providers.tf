@@ -5,7 +5,3 @@ provider "aws" {
   #     role_arn = "arn:aws:iam::123456789012:role/your-role-name"
   #   }
 }
-
-output "tftest_output" {
-  value = "Hello Terratest!"
-}
