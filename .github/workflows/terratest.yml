@@ -83,11 +83,17 @@ jobs:
           path: tests/terratest-results.txt
       # tfsec
       - name: tfsec
+        working-directory: tests
         uses: tfsec/tfsec-sarif-action@master
         with:
           sarif_file: tfsec.sarif
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v3
+      # - name: Upload SARIF file
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     # Path to SARIF file relative to the root of the repository
+      #     sarif_file: tfsec.sarif
+      - name: Upload TFSEC Results
+        uses: actions/upload-artifact@v2
         with:
-          # Path to SARIF file relative to the root of the repository
-          sarif_file: tfsec.sarif
+          name: tfsec.sarif
+          path: tfsec.sarif
