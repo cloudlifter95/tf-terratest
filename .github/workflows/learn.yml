@@ -16,7 +16,11 @@ jobs:
         run: npm install -g bats
       - name: Get Bats Version
         id: step1
-        run: echo "bat_version=$(bats -v)" >> $GITHUB_ENV
+        run: echo "bat_version=\"$(bats -v)\"" >> "$GITHUB_OUTPUT"
+      - name: check output
+        run: |
+          echo $GITHUB_ENV $GITHUB_OUTPUT
+          echo "done"
 
   myOtherJob:
     needs: check-bats-version
