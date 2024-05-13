@@ -83,6 +83,7 @@ jobs:
           path: tests/terratest-results.txt
       # tfsec
       - name: tfsec
+        working-directory: ${{ github.workspace }}
         uses: tfsec/tfsec-sarif-action@master
         with:
           sarif_file: tfsec.sarif
