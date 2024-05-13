@@ -1,3 +1,6 @@
+//go:build pass
+// +build pass
+
 package test
 
 import (
