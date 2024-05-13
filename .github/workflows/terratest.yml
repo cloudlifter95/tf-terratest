@@ -53,8 +53,8 @@ jobs:
           mv $TMPDIR/terraform /usr/local/bin/
           terraform version
       - uses: actions/setup-go@v5
-        env:
-          NODE_TLS_REJECT_UNAUTHORIZED=0
+        # env:
+        #   NODE_TLS_REJECT_UNAUTHORIZED=0
         with:
           go-version: '1.22.2'
       # - uses: hashicorp/setup-terraform@v3
