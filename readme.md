@@ -10,8 +10,13 @@ This project comes with an automated github runner, as well as a manual section 
 from project root folder, run: 
 `go mod download`  
 
-# run test
+# credentials
+set aws env variables to target your aws accounts
+
+# run tests locally 
 `go test ./tests -v`
+additionally you can scope the tests with go test tags. Ex: `go test ./tests tags=unit`
+
 
 what's next ?:
 - s3 bucket test
