@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        env: NODE_TLS_REJECT_UNAUTHORIZED=0
+        # env: NODE_TLS_REJECT_UNAUTHORIZED=0
         uses: actions/checkout@v4
       - name: Determine architecture
         id: determine_arch
