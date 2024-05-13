@@ -1,0 +1,76 @@
+name: Terratest Unit Tests
+on: push
+jobs:
+  go-tests:
+    name: Run Go Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        env: NODE_TLS_REJECT_UNAUTHORIZED=0
+        uses: actions/checkout@v4
+      - name: Determine architecture
+        id: determine_arch
+        run: echo "arch=\"$(uname -m)\"" >> "$GITHUB_OUTPUT"
+      - name: Set architecture
+        id: set_arch
+        run: |
+          ARCH="${{ steps.determine_arch.outputs.arch }}"
+          case $ARCH in
+            "x86_64")
+              ARCH="amd64"
+              ;;
+            "i386")
+              ARCH="386"
+              ;;
+            "armv6l")
+              ARCH="arm"
+              ;;
+            "armv7l")
+              ARCH="arm"
+              ;;
+            "aarch64")
+              ARCH="arm64"
+              ;;
+            *)
+              echo "Unsupported architecture: $ARCH"
+              exit 1
+              ;;
+          esac
+          echo "arch=\"$ARCH\"" >> "$GITHUB_OUTPUT"
+      - run: |
+          set -x
+          # Set desired Terraform version
+          TERRAFORM_VERSION="1.5.7"
+          # Get architecture from previous step
+          ARCH=$(echo "${{ steps.set_arch.outputs.arch }}")
+          echo $ARCH
+          # Download Terraform binary without SSL verification
+          curl -k -LO "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${ARCH}.zip"
+          echo "done"
+          ls
+          # Unzip Terraform binary
+          unzip -qq *.zip
+
+          # Move Terraform binary to a directory in PATH
+          mv terraform /usr/local/bin/
+
+          # Verify Terraform installation
+          terraform version
+      # - uses: actions/setup-go@v5
+      #   env:
+      #     NODE_TLS_REJECT_UNAUTHORIZED=0
+      #   with:
+      #     go-version: '1.22.2'
+      # - uses: hashicorp/setup-terraform@v3
+      #   env:
+      #     NODE_TLS_REJECT_UNAUTHORIZED=0
+      #   with:
+      #     terraform_version: "1.5.7"
+      # - name: Download Go Modules
+      #   run: go mod download
+      # - name: Run Go Tests
+      #   working-directory: tests
+      #   run: go test -v -tags=unit
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
