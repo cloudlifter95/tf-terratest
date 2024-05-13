@@ -13,3 +13,6 @@ from project root folder, run:
 # run test
 `go test ./tests -v`
 
+what's next ?:
+- s3 bucket test
+- github action with tftest and tfscan.

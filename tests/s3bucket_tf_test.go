@@ -1,6 +1,7 @@
 package test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/aws"
@@ -10,6 +11,8 @@ import (
 
 func TestS3IsVersioned(t *testing.T) {
 	awsRegion := "eu-central-1"
+	awsProfile := "moj9-pg"
+	os.Setenv("AWS_PROFILE", awsProfile)
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: "../terraform/",
@@ -26,3 +29,38 @@ func TestS3IsVersioned(t *testing.T) {
 	assert.Equal(t, expectedStatus, actualStatus)
 
 }
+
+// func TestGetS3BucketTagsV1(t *testing.T) {
+// 	t.Parallel()
+
+// 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
+// 		TerraformDir: "../terrr",
+// 	})
+
+// 	defer terraform.Destroy(t, terraformOptions)
+
+// 	terraform.InitAndApply(t, terraformOptions)
+
+// 	tagsMap := terraform.OutputMap(t, terraformOptions, "tags")
+
+// 	tagsToCheck := []string{"Environment", "Name"}
+
+// 	filteredTags := make(map[string]string)
+
+// 	for _, tag := range tagsToCheck {
+// 		if value, ok := tagsMap[tag]; ok {
+// 			filteredTags[tag] = value
+// 		}
+// 	}
+
+// 	expectedTagsString := `{"Environment":"Dev","Name":"mytestbucket-05082023"}`
+
+// 	var expectedTags map[string]string
+// 	err := json.Unmarshal([]byte(expectedTagsString), &expectedTags)
+// 	if err != nil {
+// 		t.Fatalf("Failed to unmarshal expected tags: %s", err)
+// 	}
+
+// 	assert.Equal(t, expectedTags, filteredTags)
+
+// }

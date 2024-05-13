@@ -1,0 +1,28 @@
+on: [push]
+
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.step1.outputs.bat_version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install Bats
+        run: npm install -g bats
+      - name: Get Bats Version
+        id: step1
+        run: echo "bat_version=$(bats -v)" >> $GITHUB_ENV
+
+  myOtherJob:
+    needs: check-bats-version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Print Bats Version
+        run: echo "Bats Version ${{ needs.check-bats-version.outputs.output1 }}"
