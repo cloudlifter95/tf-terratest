@@ -4,8 +4,7 @@ permissions:
   contents: read
   packages: write
   actions: write
-  contents: read
-  
+
 jobs:
   go-tests:
     name: Run Go Unit Tests
