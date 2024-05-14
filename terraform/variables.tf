@@ -7,5 +7,5 @@ variable "tag_bucket_environment" {
 variable "tag_bucket_name" {
   type        = string
   description = "Bucket name"
-  default     = "mjtestbucket1234567ashq81"
+  default     = "mjtestbucket1234567ashq812"
 }

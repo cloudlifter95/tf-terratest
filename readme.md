@@ -11,11 +11,13 @@ from project root folder, run:
 `go mod download`  
 
 # credentials
-set aws env variables to target your aws accounts
+- remove profile from providers.tf
+- set aws env variables to target your aws accounts
 
 # run tests locally 
 `go test ./tests -v`
 additionally you can scope the tests with go test tags. Ex: `go test ./tests tags=unit`
+(delete cache if tags separation is not working: `go clean -modcache`)
 
 
 what's next ?:

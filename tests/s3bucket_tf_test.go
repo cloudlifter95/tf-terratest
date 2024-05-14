@@ -1,9 +1,11 @@
-//go:build pass
-// +build pass
+//go:build unit
+// +build unit
 
 package test
 
 import (
+	"encoding/json"
+	"fmt"
 	"os"
 	"testing"
 
@@ -33,37 +35,63 @@ func TestS3IsVersioned(t *testing.T) {
 
 }
 
-// func TestGetS3BucketTagsV1(t *testing.T) {
-// 	t.Parallel()
+func TestGetS3BucketTagEnvironment(t *testing.T) {
+	awsRegion := "eu-central-1"
+	awsProfile := "moj9-pg"
+	os.Setenv("AWS_PROFILE", awsProfile)
 
-// 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-// 		TerraformDir: "../terrr",
-// 	})
+	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
+		TerraformDir: "../terraform/",
+	})
 
-// 	defer terraform.Destroy(t, terraformOptions)
+	defer terraform.Destroy(t, terraformOptions)
 
-// 	terraform.InitAndApply(t, terraformOptions)
+	terraform.InitAndApply(t, terraformOptions)
 
-// 	tagsMap := terraform.OutputMap(t, terraformOptions, "tags")
+	bucketID := terraform.Output(t, terraformOptions, "bucket_id")
 
-// 	tagsToCheck := []string{"Environment", "Name"}
+	tags := aws.GetS3BucketTags(t, awsRegion, bucketID)
+	val, ok := tags["Environment"]
+	fmt.Println(val)
+	expectedValue := "Dev"
+	// If the key exists
+	if ok {
+		assert.Equal(t, expectedValue, val)
+	}
 
-// 	filteredTags := make(map[string]string)
+}
 
-// 	for _, tag := range tagsToCheck {
-// 		if value, ok := tagsMap[tag]; ok {
-// 			filteredTags[tag] = value
-// 		}
-// 	}
+func TestGetS3BucketTagsV1(t *testing.T) {
+	t.Parallel()
 
-// 	expectedTagsString := `{"Environment":"Dev","Name":"mytestbucket-05082023"}`
+	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
+		TerraformDir: "../terraform",
+	})
 
-// 	var expectedTags map[string]string
-// 	err := json.Unmarshal([]byte(expectedTagsString), &expectedTags)
-// 	if err != nil {
-// 		t.Fatalf("Failed to unmarshal expected tags: %s", err)
-// 	}
+	defer terraform.Destroy(t, terraformOptions)
 
-// 	assert.Equal(t, expectedTags, filteredTags)
+	terraform.InitAndApply(t, terraformOptions)
 
-// }
+	tagsMap := terraform.OutputMap(t, terraformOptions, "tags")
+
+	tagsToCheck := []string{"Environment", "Name"}
+
+	filteredTags := make(map[string]string)
+
+	for _, tag := range tagsToCheck {
+		if value, ok := tagsMap[tag]; ok {
+			filteredTags[tag] = value
+		}
+	}
+
+	expectedTagsString := `{"Environment":"Dev","Name":"mjtestbucket1234567ashq812"}`
+
+	var expectedTags map[string]string
+	err := json.Unmarshal([]byte(expectedTagsString), &expectedTags)
+	if err != nil {
+		t.Fatalf("Failed to unmarshal expected tags: %s", err)
+	}
+
+	assert.Equal(t, expectedTags, filteredTags)
+
+}
