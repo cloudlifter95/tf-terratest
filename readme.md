@@ -19,7 +19,12 @@ from project root folder, run:
 additionally you can scope the tests with go test tags. Ex: `go test ./tests tags=unit`
 (delete cache if tags separation is not working: `go clean -modcache`)
 
+# terratest stages - test_structure
+terratest test_structure enables the sequencing of tests without provisioning and deprovisioning the infrastructure.
 
-what's next ?:
-- s3 bucket test
-- github action with tftest and tfscan.
+For that a main test function is defined, which:
+- provision and destroys infra
+- implements test_structure to define the sequences of tests to be performed.
+
+skip a test with: `SKIP_<stagename>=1 go test ./tests/ -v`
+EX: `SKIP_test_versioning=1 go test ./tests/ -v`

@@ -1,5 +1,5 @@
-//go:build notunit
-// +build notunit
+//go:build unit
+// +build unit
 
 package test
 

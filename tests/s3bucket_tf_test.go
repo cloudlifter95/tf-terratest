@@ -84,7 +84,7 @@ func TestGetS3BucketTagsV1(t *testing.T) {
 		}
 	}
 
-	expectedTagsString := `{"Environment":"Dev","Name":"mjtestbucket1234567ashq812"}`
+	expectedTagsString := `{"Environment":"Dev","Name":"mjtestbucket1234567ashq8123"}`
 
 	var expectedTags map[string]string
 	err := json.Unmarshal([]byte(expectedTagsString), &expectedTags)
